@@ -5,6 +5,8 @@ defmodule SoundCheck.Application do
 
   use Application
 
+  alias SoundCheck.Audio
+
   def start(_type, _args) do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
@@ -29,11 +31,10 @@ defmodule SoundCheck.Application do
     ]
   end
 
-  def children(_target) do
+  def children(:rpi0) do
     [
-      # Children for all targets except host
-      # Starts a worker by calling: SoundCheck.Worker.start_link(arg)
-      # {SoundCheck.Worker, arg},
+      {Audio, name: Audio},
+      {Task, fn -> Audio.play() end}
     ]
   end
 
